@@ -164,20 +164,20 @@ app.post('/task/create', function(req, res){
   });
 });
 
-// Mark a task complete
-app.post('/task/complete/:id', function(req, res){
-  Tasks.findById(req.params.id, function(err, task){
-    if(task.isComplete){
-      Tasks.update({_id:req.params.id}, {isComplete: false},
-      function(err)
-    if (err)
-    {res.send('dfsdfd');
-    }else{
-      res.redirect('/');
-    }
-  }else{}
-    });
-});
+// // Mark a task complete
+// app.post('/task/complete/:id', function(req, res){
+//   Tasks.findById(req.params.id, function(err, task){
+//     if(task.isComplete){
+//       Tasks.update({_id:req.params.id}, {isComplete: false},
+//       function(err)
+//     if (err)
+//     {res.send('dfsdfd');
+//     }else{
+//       res.redirect('/');
+//     }
+//   }else{}
+//     });
+// });
 
 // Delete a task
 app.post('/task/delete/:id', function(req, res){
