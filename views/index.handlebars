@@ -16,13 +16,19 @@
         {{#if tasks}}
             <ul>
             {{#each tasks}}
-                <li class="tasks-list-item">
+              {{#if this.isComplete}}
+                <li class="tasks-list-item complete-task">
+              {{else}}
+              <li class="tasks-list-item">
+
+              {{/if}}
                   <span class="task-title">{{this.title}}</span>
                 {{#if this.owned}}
                   <form action="/task/delete/{{this.id}}" method="POST">
                     <input type="submit" name="delete-task" class="delete-task" value="Delete">
                   </form>
                 {{/if}}
+
                   <form action="task/complete/{{this.id}}" method="post">
                     <input type="submit" name="toggle-task" class="toggle-task" value="Mark complete">
                   </form>

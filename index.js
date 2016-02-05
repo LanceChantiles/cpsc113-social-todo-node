@@ -16,6 +16,7 @@ var store = new MongoDBStore({
   uri: process.env.MONGO_URL,
   collection: 'sessions'
 });
+app.use(express.static(__dirname + '/css'));
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -164,26 +165,36 @@ app.post('/task/create', function(req, res){
   });
 });
 
-// // Mark a task complete
-// app.post('/task/complete/:id', function(req, res){
-//   Tasks.findById(req.params.id, function(err, task){
-//     if(task.isComplete){
-//       Tasks.update({_id:req.params.id}, {isComplete: false},
-//       function(err)
-//     if (err)
-//     {res.send('dfsdfd');
-//     }else{
-//       res.redirect('/');
-//     }
-//   }else{}
-//     });
-// });
+// Mark a task complete
+app.post('/task/complete/:id', function(req, res){
+  Tasks.findById(req.params.id, function(err, task){
+    if(task.isComplete){
+        Tasks.update({_id:req.params.id}, {isComplete: false},
+        function(err) {
+          if (err) {
+            res.send('Error in marking task complete');
+          }else{
+            res.redirect('/');
+          }
+        });
+    }else{
+      Tasks.update({_id:req.params.id}, {isComplete: true},
+        function(err){
+          if (err) {
+            res.send('Error in marking task complete');
+          }else{
+            res.redirect('/');
+          }
+        });
+        }
+      });
+});
 
 // Delete a task
 app.post('/task/delete/:id', function(req, res){
     var id = req.params.id;
     Tasks.find({_id: id}).remove().exec();
-    res.redirect('/');
+      res.redirect('/');
 });
 
 // Start the server
