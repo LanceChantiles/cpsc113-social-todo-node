@@ -64,6 +64,13 @@ function loadUserTasks(req, res, next) {
       {collaborators: res.locals.currentUser.email}])
     .exec(function(err, tasks){
       if(!err){
+        for(var i = 0; i < tasks.length; i++)
+        {
+          if(res.locals.currentUser._id.toString == tasks[i].owner.toString)
+          {
+            var owned = true;
+          }
+        }
         res.locals.tasks = tasks;
       }
       next();
@@ -132,8 +139,9 @@ app.post('/user/login', function (req, res) {
 
 // Log a user out
 app.get('/user/logout', function(req, res){
-  req.session.destroy();
-  res.redirect('/');
+  req.session.destroy(function(){
+    res.redirect('/');
+  });
 });
 
 //  All the controllers and routes below this require
@@ -154,6 +162,25 @@ app.post('/task/create', function(req, res){
       res.redirect('/');
     }
   });
+});
+
+// Mark a task complete
+app.post('/task/complete/:id', function(req, res){
+  // console.log("Complete")
+  // Tasks.find({_id: id});
+  // res.redirect()
+  // Tasks.isComplete = true;
+  // res.send("Complete");
+
+//Find task, does person have permission to mark complete, if so change boolean value
+
+});
+
+// Delete a task
+app.post('/task/delete/:id', function(req, res){
+    var id = req.params.id;
+    Tasks.find({_id: id}).remove().exec();
+    res.redirect('/');
 });
 
 // Start the server
