@@ -66,9 +66,9 @@ function loadUserTasks(req, res, next) {
       if(!err){
         for(var i = 0; i < tasks.length; i++)
         {
-          if(res.locals.currentUser._id.toString == tasks[i].owner.toString)
+          if(res.locals.currentUser._id.toString() == tasks[i].owner.toString())
           {
-            var owned = true;
+            tasks[i].owned = true;
           }
         }
         res.locals.tasks = tasks;
@@ -166,14 +166,17 @@ app.post('/task/create', function(req, res){
 
 // Mark a task complete
 app.post('/task/complete/:id', function(req, res){
-  // console.log("Complete")
-  // Tasks.find({_id: id});
-  // res.redirect()
-  // Tasks.isComplete = true;
-  // res.send("Complete");
-
-//Find task, does person have permission to mark complete, if so change boolean value
-
+  Tasks.findById(req.params.id, function(err, task){
+    if(task.isComplete){
+      Tasks.update({_id:req.params.id}, {isComplete: false},
+      function(err)
+    if (err)
+    {res.send('dfsdfd');
+    }else{
+      res.redirect('/');
+    }
+  }else{}
+    });
 });
 
 // Delete a task
